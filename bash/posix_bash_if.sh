@@ -46,3 +46,57 @@ fi
 #################################
 # https://stackoverflow.com/questions/6499486/how-to-mark-an-array-in-posix-sh
 
+
+
+## 有待整理 =================================================
+
+
+branch_name_lowercase="feature-devope-2222"
+branch_type_develop="develop"
+branch_type_release="release"
+
+
+echo "sh的posix是不允许[[的"
+echo "可以在posix shell下执行成功的"
+# https://stackoverflow.com/questions/2829613/how-do-you-tell-if-a-string-contains-another-string-in-posix-sh
+# Shell grep must use variabe substitute
+result1=$(echo "$branch_name_lowercase" | grep "$branch_type_release")
+result2=$(echo $branch_name_lowercase | grep "$branch_type_release")
+echo "result1: $result1"
+echo "result2: $result2"
+
+echo "This works"
+if [ "$result1" != "" ] || [ "$result2" != "" ]; then
+fi
+
+echo "This also works https://stackoverflow.com/questions/3826425/how-to-represent-multiple-conditions-in-a-shell-if-statement "
+if echo "$branch_name_lowercase" | grep -q "$branch_type_develop"
+fi
+
+# grep not 100% work
+echo "This absolute work"
+if echo "$branch_name_lowercase" | grep -q "$branch_type_release" || echo "$branch_name_lowercase" | grep -q "$branch_type_develop"
+then
+fi
+
+
+echo "bash下面认可的if条件句"
+if echo "$branch_name_lowercase" | grep -q "$branch_type_develop"
+then
+	echo "This is the develop branch, we will push the same image with 'latest' "
+  	base_image_tag2='latest'
+  	createImageAndPush $dockermcm5_image_name $script_absolute_working_dir $mcm5_base_work_dir_relative \
+	$base_image_tag2 $script_docker_server $script_docker_user $script_docker_pwd
+fi
+
+
+
+
+echo "Fit for both bash and shell"
+echo "Case 1"
+result=$(echo $branch_name_lowercase | grep "develop")
+echo $result
+if [ "$result" != "" ]; then
+	echo "Not equal"
+fi
+
